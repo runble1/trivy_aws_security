@@ -19,8 +19,8 @@ jobs:
       - name: Run Trivy vulnerability scanner in IaC mode
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: "config"
-          scan-ref: "./modules/" # 
+          scan-type: "conf"
+          scan-ref: "./modules/"
           hide-progress: false
           format: "sarif"
           output: "trivy-results.sarif"
@@ -29,7 +29,7 @@ jobs:
           severity: "CRITICAL,HIGH"
           limit-severities-for-sarif: true # falseの場合、全severityのアラートが出力される
 
-      - name: Upload Trivy scan results to GitHub Security tab
+          - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: "trivy-results.sarif"
