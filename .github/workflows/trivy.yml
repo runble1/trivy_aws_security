@@ -1,0 +1,36 @@
+name: Trivy AWS Misconfiguration
+
+on:
+  push:
+    branches:
+      - main # Or your default branch
+  pull_request:
+    branches:
+      - main # Or your default branch
+  workflow_dispatch:
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          scan-ref: "./modules/" # 
+          hide-progress: false
+          format: "sarif"
+          output: "trivy-results.sarif"
+          exit-code: "0" # 0の場合、脆弱性が見つかっても終了しない
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+          limit-severities-for-sarif: true # falseの場合、全severityのアラートが出力される
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: "trivy-results.sarif"
+          #category: results
