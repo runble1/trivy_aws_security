@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    aws = "5.14.0"
+    aws = "5.21.0"
   }
   backend "s3" {
     region  = "ap-northeast-1"
